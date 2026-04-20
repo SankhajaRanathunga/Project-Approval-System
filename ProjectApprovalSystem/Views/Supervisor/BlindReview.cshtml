@@ -1,0 +1,88 @@
+@model IEnumerable<ProjectApprovalSystem.ViewModels.ProposalSummaryViewModel>
+
+@{
+    ViewData["Title"] = "Blind Review - Global Search";
+}
+
+<div class="row mb-5">
+    <div class="col-md-12 text-center py-4 bg-white rounded-4 shadow-sm mb-4 border-bottom border-primary border-4">
+        <h1 class="display-6 fw-bold text-dark">Global Project Search</h1>
+        <p class="text-muted mb-0">Discover and review proposals across all research areas anonymously.</p>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="col-md-12 mb-4">
+        <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-body p-4">
+                <form method="get" asp-action="BlindReview" class="row g-3 align-items-end">
+                    <div class="col-md-9">
+                        <label class="form-label fw-bold small text-uppercase text-muted">Filter by Research Area</label>
+                        <select name="researchAreaId" class="form-select form-select-lg border-2" asp-items="@(new SelectList(ViewBag.ResearchAreas, "Id", "Name"))">
+                            <option value="">-- All Research Areas --</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-primary btn-lg w-100 py-2 shadow-sm">
+                            <i class="bi bi-search me-2"></i>Apply Filter
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-6">
+            <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden hover-shadow transition-all">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill fw-bold">
+                            @item.ResearchAreaName
+                        </span>
+                        <div class="bg-light px-2 py-1 rounded text-muted tiny fw-bold"><i class="bi bi-eye-slash-fill me-1"></i>ANONYMOUS</div>
+                    </div>
+                    <h5 class="fw-bold mb-3">@item.Title</h5>
+                    <p class="text-muted small mb-4" style="line-height: 1.6;">@item.Abstract</p>
+                    
+                    <div class="mb-4">
+                        <label class="tiny fw-bold text-uppercase text-muted d-block mb-2">Tech Stack</label>
+                        <div class="d-flex flex-wrap gap-2">
+                             @foreach (var tech in item.TechnicalStack.Split(','))
+                             {
+                                 <span class="badge bg-white text-dark border px-2 py-1 tiny shadow-sm">@tech.Trim()</span>
+                             }
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-light border-0 p-3 d-flex justify-content-center">
+                    <form asp-action="ExpressInterest" asp-route-proposalId="@item.Id" method="post" class="w-100 px-3">
+                        <button type="submit" class="btn btn-sm btn-primary w-100 py-2 rounded-pill shadow-sm">
+                            <i class="bi bi-lightning-charge-fill me-1"></i>Express Interest
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="col-12 text-center py-5">
+            <i class="bi bi-cloud-slash display-1 text-muted opacity-25"></i>
+            <h3 class="mt-4 fw-bold">No proposals match this filter</h3>
+            <p class="text-muted">Try a wider research area or check back later.</p>
+        </div>
+    }
+</div>
+
+<style>
+    .tiny { font-size: 0.75rem; }
+    .hover-shadow:hover { 
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important; 
+        transform: translateY(-5px); 
+    }
+    .transition-all { transition: all 0.3s ease; }
+</style>

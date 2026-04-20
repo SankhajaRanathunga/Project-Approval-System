@@ -1,0 +1,101 @@
+@model ProjectApprovalSystem.ViewModels.MatchDetailsViewModel
+
+@{
+    ViewData["Title"] = "Identity Reveal - Match Confirmed";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-10 col-lg-8">
+        <div class="text-center mb-5">
+            <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex p-4 mb-4 shadow-sm animate-bounce">
+                <i class="bi bi-award-fill text-success" style="font-size: 4rem;"></i>
+            </div>
+            <h1 class="display-4 fw-bold">Identification Revealed</h1>
+            <p class="lead text-muted">A mutual match has been established. Detailed student and supervisor contact information is now visible.</p>
+        </div>
+
+        <div class="card shadow border-0 rounded-4 overflow-hidden mb-5">
+            <div class="card-header bg-dark text-white py-3 px-4 d-flex justify-content-between align-items-center">
+                <span class="fw-bold fw-monospace text-uppercase small tracking-widest"><i class="bi bi-shield-check me-2"></i>Official Match Record</span>
+                <span class="badge bg-success">@Model.Status</span>
+            </div>
+            <div class="card-body p-5">
+                <h2 class="fw-bold border-bottom pb-4 mb-5">@Model.Title</h2>
+                
+                <div class="row g-5">
+                    <!-- Student Column -->
+                    <div class="col-md-6 border-end">
+                        <div class="d-flex align-items-center mb-4">
+                            <div class="bg-primary rounded-3 p-2 me-3">
+                                <i class="bi bi-person-badge text-white fs-4"></i>
+                            </div>
+                            <h4 class="fw-bold mb-0">Student Profile</h4>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="text-muted small fw-bold text-uppercase d-block mb-1">Full Name</label>
+                            <div class="fs-5 fw-bold">@Model.StudentFullName</div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="text-muted small fw-bold text-uppercase d-block mb-1">Student University ID</label>
+                            <div class="fs-6 text-primary fw-mono">@Model.StudentId</div>
+                        </div>
+                        
+                        <div class="mb-0">
+                            <label class="text-muted small fw-bold text-uppercase d-block mb-1">Contact Email</label>
+                            <a href="mailto:@Model.StudentEmail" class="text-decoration-none">@Model.StudentEmail</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Supervisor Column -->
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center mb-4">
+                            <div class="bg-success rounded-3 p-2 me-3">
+                                <i class="bi bi-mortarboard text-white fs-4"></i>
+                            </div>
+                            <h4 class="fw-bold mb-0">Supervisor Profile</h4>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="text-muted small fw-bold text-uppercase d-block mb-1">Academic Staff</label>
+                            <div class="fs-5 fw-bold">@Model.SupervisorFullName</div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="text-muted small fw-bold text-uppercase d-block mb-1">Staff ID / Office</label>
+                            <div class="fs-6 text-success fw-mono">@Model.SupervisorStaffId</div>
+                        </div>
+                        
+                        <div class="mb-0">
+                            <label class="text-muted small fw-bold text-uppercase d-block mb-1">Contact Email</label>
+                            <a href="mailto:@Model.SupervisorEmail" class="text-decoration-none">@Model.SupervisorEmail</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer bg-light p-4 text-center">
+                <p class="mb-0 text-muted small">Match established on <strong>@Model.MatchedAt.ToString("MMMM dd, yyyy")</strong> at <strong>@Model.MatchedAt.ToString("HH:mm UTC")</strong></p>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-center gap-3">
+            <a asp-action="Dashboard" class="btn btn-outline-dark btn-lg px-5 rounded-pill">
+                <i class="bi bi-arrow-left me-2"></i>Return to Dashboard
+            </a>
+            <button class="btn btn-primary btn-lg px-5 rounded-pill shadow" onclick="window.print()">
+                <i class="bi bi-printer me-2"></i>Download Record
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+    .fw-mono { font-family: 'Courier New', Courier, monospace; }
+    .tracking-widest { letter-spacing: 0.15em; }
+    @@keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+    }
+    .animate-bounce { animation: bounce 2s infinite; }
+</style>

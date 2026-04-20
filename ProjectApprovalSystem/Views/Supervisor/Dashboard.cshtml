@@ -1,0 +1,93 @@
+@model IEnumerable<ProjectApprovalSystem.ViewModels.ProposalSummaryViewModel>
+
+@{
+    ViewData["Title"] = "Supervisor Dashboard";
+}
+
+<div class="row mb-5 align-items-end">
+    <div class="col-md-7">
+        <h1 class="display-5 fw-bold mb-0">Blind Review Portal</h1>
+        <p class="lead text-muted">Proposals are rendered anonymously. Identity is only revealed upon mutual match confirmation.</p>
+    </div>
+    <div class="col-md-5 text-md-end">
+        <a asp-action="ManageExpertise" class="btn btn-outline-primary btn-lg px-4 rounded-pill border-2">
+            <i class="bi bi-tags-fill me-2"></i>Update My Expertise
+        </a>
+    </div>
+</div>
+
+<div class="row g-4">
+    @foreach (var item in Model)
+    {
+        <div class="col-12">
+            <div class="card shadow-sm border-0 rounded-4 overflow-hidden hover-shadow transition-all">
+                <div class="row g-0">
+                    <div class="col-md-9 p-4 p-lg-5">
+                        <div class="d-flex align-items-center mb-3">
+                            <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill fw-bold me-3">
+                                <i class="bi bi-bookmark-fill me-1"></i>@item.ResearchAreaName
+                            </span>
+                            <small class="text-muted"><i class="bi bi-clock-history me-1"></i>Submitted @item.SubmittedAt.ToString("MMM dd, yyyy")</small>
+                        </div>
+                        
+                        <h3 class="fw-bold mb-3">@item.Title</h3>
+                        <p class="text-muted mb-4 fs-5" style="line-height: 1.7;">@item.Abstract</p>
+                        
+                        <div class="d-flex flex-wrap gap-2">
+                            <span class="text-dark fw-bold small text-uppercase me-2 mt-1">Tech Stack:</span>
+                            @foreach (var tech in item.TechnicalStack.Split(','))
+                            {
+                                <span class="badge bg-white text-dark border px-2 py-1">@tech.Trim()</span>
+                            }
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 bg-light d-flex flex-column justify-content-center p-4 border-start border-white border-4">
+                        <div class="text-center mb-4">
+                            <div class="bg-white rounded-circle d-inline-flex p-3 shadow-sm mb-3">
+                                <i class="bi bi-person-bounding-box fs-2 text-muted"></i>
+                            </div>
+                            <div class="text-uppercase small fw-bold text-muted tracking-wider">Identity Concealed</div>
+                        </div>
+
+                        @if (item.Status == ProjectApprovalSystem.Models.Enums.ProjectStatus.UnderReview)
+                        {
+                            <form asp-action="ConfirmMatch" asp-route-proposalId="@item.Id" method="post">
+                                <button type="submit" class="btn btn-success w-100 py-3 rounded-3 shadow mb-2">
+                                    <i class="bi bi-check-circle-fill me-2"></i>Confirm Match
+                                </button>
+                                <p class="text-center small text-info mt-2"><i class="bi bi-info-circle me-1"></i>Interest already expressed</p>
+                            </form>
+                        }
+                        else
+                        {
+                            <form asp-action="ExpressInterest" asp-route-proposalId="@item.Id" method="post">
+                                <button type="submit" class="btn btn-primary w-100 py-3 rounded-3 shadow">
+                                    <i class="bi bi-lightning-fill me-2"></i>Express Interest
+                                </button>
+                            </form>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="col-12 text-center py-5">
+            <div class="bg-white p-5 rounded-4 border shadow-sm">
+                <i class="bi bi-search display-1 text-muted opacity-25"></i>
+                <h3 class="mt-4 fw-bold">No proposals found</h3>
+                <p class="text-muted mb-4">Try updating your research areas or check back later for new submissions.</p>
+                <a asp-action="ManageExpertise" class="btn btn-primary px-5 py-3 rounded-pill">Manage Research Areas</a>
+            </div>
+        </div>
+    }
+</div>
+
+<style>
+    .hover-shadow:hover { box-shadow: 0 1rem 3rem rgba(0,0,0,.1) !important; transform: scale(1.005); }
+    .transition-all { transition: all 0.3s ease; }
+    .tracking-wider { letter-spacing: 0.1em; }
+</style>
