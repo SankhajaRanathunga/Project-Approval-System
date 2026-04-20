@@ -1,0 +1,113 @@
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="container py-5">
+    <!-- Hero Section -->
+    <div class="row align-items-center py-5 mb-5 rounded-4 overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);">
+        <div class="col-lg-7 p-5">
+            <h1 class="display-3 fw-bold text-dark mb-4" style="line-height: 1.1;">
+                <span class="text-primary d-block">Blind-Match</span>
+                Project Approval System
+            </h1>
+            <p class="lead mb-5 text-muted pe-lg-5">
+                A high-performance, secure platform designed to foster unbiased project matching. 
+                Focus on the technical merit of students' ideas, with identity reveals only after confirmed matches.
+            </p>
+            
+            <div class="d-flex flex-wrap gap-3">
+                @if (!User.Identity!.IsAuthenticated)
+                {
+                    <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-primary btn-lg px-5 py-3 fw-bold shadow">Get Started Now</a>
+                    <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-outline-dark btn-lg px-5 py-3 fw-bold">Login</a>
+                }
+                else
+                {
+                    @if (User.IsInRole("Student"))
+                    {
+                        <a asp-controller="Student" asp-action="Dashboard" class="btn btn-primary btn-lg px-5 py-3 fw-bold shadow">Go to Dashboard</a>
+                    }
+                    else if (User.IsInRole("Supervisor"))
+                    {
+                        <a asp-controller="Supervisor" asp-action="Dashboard" class="btn btn-primary btn-lg px-5 py-3 fw-bold shadow">Review Proposals</a>
+                    }
+                    else
+                    {
+                        <a asp-controller="Admin" asp-action="Dashboard" class="btn btn-primary btn-lg px-5 py-3 fw-bold shadow">Admin Panel</a>
+                    }
+                }
+            </div>
+        </div>
+        
+        <div class="col-lg-5 text-center d-none d-lg-block position-relative">
+            <!-- Visual Element replacing the broken image -->
+            <div class="hero-visual-wrapper p-5">
+                <div class="position-absolute top-50 start-50 translate-middle" style="z-index: 1;">
+                    <i class="bi bi-shield-lock-fill text-primary display-1" style="font-size: 12rem; opacity: 0.15;"></i>
+                </div>
+                <div class="match-cards-visual position-relative" style="z-index: 2;">
+                    <div class="card shadow-lg p-3 position-absolute top-0 start-0 rotate-n5" style="width: 250px; border-radius: 15px;">
+                        <div class="placeholder-glow">
+                            <span class="placeholder col-7 bg-primary opacity-25"></span>
+                            <span class="placeholder col-4"></span>
+                            <span class="placeholder col-4"></span>
+                            <span class="placeholder col-6"></span>
+                        </div>
+                        <div class="mt-2 small text-muted"><i class="bi bi-person-slash me-1"></i>Anonymous Student</div>
+                    </div>
+                    <div class="card shadow p-3 position-absolute top-50 start-50 translate-middle rotate-5" style="width: 260px; border-radius: 15px; border-left: 5px solid #3f51b5;">
+                        <h6 class="fw-bold text-primary mb-1">AI Research Project</h6>
+                        <p class="small mb-0 text-muted">Machine learning driven matching logic for academia...</p>
+                        <div class="badge bg-light text-primary mt-2">Under Review</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feature Section -->
+    <div class="row g-4 py-5 border-top border-light">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 bg-transparent">
+                <div class="card-body p-4">
+                    <div class="icon-square bg-primary bg-gradient text-white d-inline-flex align-items-center justify-content-center fs-4 rounded-3 mb-3 shadow-sm" style="width: 60px; height: 60px;">
+                        <i class="bi bi-eye-slash-fill"></i>
+                    </div>
+                    <h3 class="h4 fw-bold">Blind Matching</h3>
+                    <p class="text-muted">Students submit ideas without names or IDs. Supervisors browse and filter based solely on research area and technical stack compatibility.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 bg-transparent">
+                <div class="card-body p-4">
+                    <div class="icon-square bg-success bg-gradient text-white d-inline-flex align-items-center justify-content-center fs-4 rounded-3 mb-3 shadow-sm" style="width: 60px; height: 60px;">
+                        <i class="bi bi-person-check-fill"></i>
+                    </div>
+                    <h3 class="h4 fw-bold">Seamless Approval</h3>
+                    <p class="text-muted">The system automates the reveal process. Only after a supervisor confirms interest does the system release contact and identity details.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 bg-transparent">
+                <div class="card-body p-4">
+                    <div class="icon-square bg-info bg-gradient text-white d-inline-flex align-items-center justify-content-center fs-4 rounded-3 mb-3 shadow-sm" style="width: 60px; height: 60px;">
+                        <i class="bi bi-shield-check"></i>
+                    </div>
+                    <h3 class="h4 fw-bold">Oversight & Control</h3>
+                    <p class="text-muted">Module Leaders maintain full visibility of the matching pipeline through a centralized dashboard with manual override capabilities.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .rotate-n5 { transform: rotate(-8deg) translateX(-20px); }
+    .rotate-5 { transform: rotate(5deg) translateY(40px) translateX(20px); }
+    .hero-visual-wrapper { min-height: 400px; position: relative; }
+    .display-3 { letter-spacing: -2px; }
+    .btn-lg { border-radius: 12px; transition: all 0.3s cubic-bezier(.4,0,.2,1); }
+    .btn-lg:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important; }
+</style>

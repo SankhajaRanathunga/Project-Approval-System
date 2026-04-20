@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - PAS</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8f9fa; }
+        .navbar { background: linear-gradient(135deg, #1a237e 0%, #283593 100%); }
+        .navbar-brand, .nav-link { color: rgba(255,255,255,0.9) !important; }
+        .nav-link:hover { color: #fff !important; }
+        .card { border: none; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: transform 0.2s; }
+        .card:hover { transform: translateY(-2px); }
+        .btn-primary { background-color: #3f51b5; border: none; border-radius: 8px; padding: 10px 20px; font-weight: 500; }
+        .badge-pending { background-color: #ffc107; color: #000; }
+        .badge-review { background-color: #17a2b8; color: #fff; }
+        .badge-matched { background-color: #28a745; color: #fff; }
+        .badge-withdrawn { background-color: #6c757d; color: #fff; }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3 shadow-sm">
+            <div class="container-fluid">
+                <a class="navbar-brand fw-bold px-3 py-2 rounded-3" asp-area="" asp-controller="Home" asp-action="Index" style="background: rgba(255,255,255,0.1);">
+                    <i class="bi bi-shield-lock-fill me-2"></i>Blind-Match PAS
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1 ms-3">
+                        <li class="nav-item">
+                            <a class="nav-link px-3" asp-area="" asp-controller="Home" asp-action="Index"><i class="bi bi-house-door me-1"></i>Home</a>
+                        </li>
+                        
+                        @if (User.Identity!.IsAuthenticated)
+                        {
+                            @if (User.IsInRole("Student"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link px-3" asp-controller="Student" asp-action="Dashboard"><i class="bi bi-grid-1x2 me-1"></i>My Proposals</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link px-3 text-warning fw-bold" asp-controller="Student" asp-action="CreateProposal"><i class="bi bi-plus-circle-fill me-1"></i>Submit New</a>
+                                </li>
+                            }
+                            @if (User.IsInRole("Supervisor"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link px-3" asp-controller="Supervisor" asp-action="Dashboard"><i class="bi bi-eye-slash-fill me-1"></i>Blind Review</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link px-3" asp-controller="Supervisor" asp-action="ManageExpertise"><i class="bi bi-tags-fill me-1"></i>My Expertise</a>
+                                </li>
+                            }
+                            @if (User.IsInRole("ModuleLeader") || User.IsInRole("SystemAdmin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link px-3" asp-controller="Admin" asp-action="Dashboard"><i class="bi bi-speedometer2 me-1"></i>Admin Panel</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link px-3" asp-controller="Admin" asp-action="ManageUsers"><i class="bi bi-people-fill me-1"></i>Users</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link px-3" asp-controller="Admin" asp-action="MatchOversight"><i class="bi bi-clipboard-check-fill me-1"></i>Oversight</a>
+                                </li>
+                            }
+                        }
+                    </ul>
+                    <partial name="_LoginPartial" />
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="bi bi-check-circle-fill me-2"></i>@TempData["Success"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>@TempData["Error"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted bg-white py-3 mt-auto">
+        <div class="container text-center">
+            &copy; 2026 - Project Approval System (PAS)
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
