@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="ProjectApprovalSystem.Tests/ProjectApprovalSystem.Tests.csproj" />
+  <Project Path="ProjectApprovalSystem/ProjectApprovalSystem.csproj" />
+</Solution>
