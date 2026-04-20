@@ -1,0 +1,80 @@
+@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow-sm border-0 rounded-4">
+            <div class="card-body p-5">
+                <div class="text-center mb-4">
+                    <div class="bg-primary bg-gradient rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <i class="bi bi-person-plus-fill text-white fs-3"></i>
+                    </div>
+                    <h1 class="h3 fw-bold">Create an Account</h1>
+                    <p class="text-muted">Join the Project Approval System</p>
+                </div>
+
+                <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                    
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.FullName" class="form-control" autocomplete="name" aria-required="true" placeholder="John Doe" />
+                        <label asp-for="Input.FullName">Full Name</label>
+                        <span asp-validation-for="Input.FullName" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                        <label asp-for="Input.Email">Email Address</label>
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Input.Role" class="form-label fw-bold">Registering as</label>
+                        <div class="d-flex gap-3">
+                            <div class="flex-fill">
+                                <input type="radio" asp-for="Input.Role" value="Student" class="btn-check" id="roleStudent" autocomplete="off" checked>
+                                <label class="btn btn-outline-primary w-100 p-3" for="roleStudent">
+                                    <i class="bi bi-mortarboard d-block fs-4 mb-1"></i>
+                                    Student
+                                </label>
+                            </div>
+                            <div class="flex-fill">
+                                <input type="radio" asp-for="Input.Role" value="Supervisor" class="btn-check" id="roleSupervisor" autocomplete="off">
+                                <label class="btn btn-outline-success w-100 p-3" for="roleSupervisor">
+                                    <i class="bi bi-person-workspace d-block fs-4 mb-1"></i>
+                                    Supervisor
+                                </label>
+                            </div>
+                        </div>
+                        <span asp-validation-for="Input.Role" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                        <label asp-for="Input.Password">Password</label>
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating mb-4">
+                        <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                        <label asp-for="Input.ConfirmPassword">Confirm Password</label>
+                        <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                    </div>
+
+                    <button id="registerSubmit" type="submit" class="btn btn-primary btn-lg w-100 shadow-sm py-3 mb-4">Register</button>
+                    
+                    <div class="text-center">
+                        <p class="mb-0 text-muted">Already have an account? <a asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl" class="text-primary fw-bold text-decoration-none">Login here</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
